@@ -1,39 +1,3 @@
-/* Modern yazı tipi */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    /* Arka plan dosyan: bg.jpg */
-    background: url('bg.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Sayfayı karartıp içeriği öne çıkaran katman */
-body::before {
-    content: '';
-    position: absolute;
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%;
-    background: rgba(0, 0, 0, 0.45); 
-    z-index: 1;
-}
-
 /* Üstteki müzik çalar arayüzü */
 .audio-player-ui {
     position: absolute;
@@ -52,73 +16,11 @@ body::before {
     font-size: 0.8rem;
     letter-spacing: 1px;
     text-transform: uppercase;
+    cursor: pointer; /* Fare imlecini el şekline çevirir */
+    transition: background 0.3s ease; /* Yumuşak renk geçişi */
 }
 
-/* Profil konteyneri ve giriş animasyonu */
-.profile-container {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    animation: fadeIn 1.2s ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Profil fotoğrafı stili */
-.avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #222;
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease;
-}
-
-.avatar:hover {
-    transform: scale(1.05);
-}
-
-/* İsim stili */
-.name {
-    font-size: 2.2rem;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-/* Alt başlık stili */
-.subtitle {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-    min-height: 20px;
-}
-
-/* Sosyal medya ikonları */
-.social-links {
-    display: flex;
-    gap: 25px;
-    margin-top: 10px;
-}
-
-.social-links a {
-    color: #fff;
-    font-size: 1.8rem;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    opacity: 0.8;
-}
-
-.social-links a:hover {
-    opacity: 1;
-    transform: translateY(-5px);
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+/* Üzerine gelindiğinde veya çalarken hafifçe parlasın */
+.audio-player-ui:hover, .audio-player-ui.playing {
+    background: rgba(255, 255, 255, 0.15);
 }
