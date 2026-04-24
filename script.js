@@ -97,11 +97,20 @@ document.addEventListener('keydown', (e) => {
         document.body.classList.add('blood-mode');
         document.getElementById('profile-name').textContent = "SESSİZLİK BOZULDU.";
         
-        // Müzik yavaşlatma
         bgMusic.playbackRate = 0.5; 
         
         texts = ["Onu duydun mu?", "Kaçacak yerin yok.", "Sessizlik başliyor..."];
         tIdx = 0; cIdx = 0;
         loadParticles("#ff0000");
+    }
+});
+
+// --- 8. Dinamik Sekme Başlığı ---
+let originalTitle = document.title;
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        document.title = "Sessizlik çöküyor...";
+    } else {
+        document.title = originalTitle;
     }
 });
