@@ -20,7 +20,7 @@ musicBtn.addEventListener('click', () => {
 
 // --- 2. Custom Cursor ---
 const cursor = document.querySelector('.custom-cursor');
-const links = document.querySelectorAll('a, .audio-player-ui, .avatar');
+const links = document.querySelectorAll('a, .audio-player-ui, .avatar, button, .close-btn');
 
 document.addEventListener('mousemove', (e) => {
     cursor.style.left = e.clientX + 'px';
@@ -34,7 +34,7 @@ links.forEach(l => {
 
 // --- 3. Typewriter ---
 const typeWriterElement = document.getElementById('typewriter');
-const texts = ["Gamer", "Writer", "Audiophile", "Tech Enthusiast"];
+let texts = ["Gamer", "Writer", "Audiophile", "Tech Enthusiast"];
 let tIdx = 0, cIdx = 0, isDel = false;
 
 function type() {
@@ -48,7 +48,16 @@ function type() {
 }
 type();
 
-// --- 4. Lanyard API (Discord & Spotify) ---
+// --- 4. Projeler Modal ---
+const modal = document.getElementById("projects-modal");
+const btn = document.getElementById("open-modal-btn");
+const span = document.getElementsByClassName("close-btn")[0];
+
+btn.onclick = function() { modal.classList.add("show"); }
+span.onclick = function() { modal.classList.remove("show"); }
+window.onclick = function(event) { if (event.target == modal) { modal.classList.remove("show"); } }
+
+// --- 5. Lanyard API (Discord & Spotify) ---
 const discordId = '771027676055207938';
 
 async function updateStatus() {
@@ -56,12 +65,10 @@ async function updateStatus() {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${discordId}`);
         const { data } = await res.json();
         
-        // Discord Durumu
         document.getElementById('d-dot').className = `status-dot ${data.discord_status}`;
         const statusMap = { online: 'Çevrimiçi', idle: 'Boşta', dnd: 'Rahatsız Etmeyin', offline: 'Çevrimdışı' };
-        document.getElementById('d-text').textContent = statusMap[data.discord_status];
+        document.getElementById('d-text').textContent = statusMap[data.discord_status] || 'Çevrimdışı';
 
-        // Spotify Durumu
         const spotifyCard = document.getElementById('spotify-status');
         if (data.listening_to_spotify) {
             spotifyCard.style.display = 'flex';
@@ -75,13 +82,54 @@ async function updateStatus() {
 setInterval(updateStatus, 10000);
 updateStatus();
 
-// --- 5. Particles ---
-particlesJS('particles-js', {
-    particles: {
-        number: { value: 40 },
-        color: { value: "#fff" },
-        opacity: { value: 0.2 },
-        size: { value: 2 },
-        move: { enable: true, speed: 0.5 }
+// --- 6. Particles.js Kurulumu (Varsayılan Beyaz) ---
+function initParticles(colorHex) {
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 50 },
+            color: { value: colorHex },
+            opacity: { value: 0.3 },
+            size: { value: 2 },
+            move: { enable: true, speed: 0.8 }
+        }
+    });
+}
+initParticles("#ffffff");
+
+// --- 7. EASTER EGG (LUELLA) ---
+let typedKeys = "";
+document.addEventListener('keydown', (e) => {
+    typedKeys += e.key.toLowerCase();
+    // Son 6 karakteri tut (luella = 6 harf)
+    if (typedKeys.length > 6) {
+        typedKeys = typedKeys.slice(-6);
+    }
+    
+    // Eğer "luella" yazıldıysa efekti tetikle
+    if (typedKeys === "luella") {
+        triggerLuellaEffect();
     }
 });
+
+function triggerLuellaEffect() {
+    // Kırmızı glitch modunu aç
+    document.body.classList.add('blood-mode');
+    
+    // İsmi değiştir
+    document.getElementById('profile-name').textContent = "LUELLA UYANDI...";
+    
+    // Daktilodaki yazıları karanlık temaya çevir
+    texts = ["Sessizlik bozuldu.", "Kimse güvende değil.", "O burada."];
+    tIdx = 0; cIdx = 0;
+    
+    // Parçacıkları kan kırmızısına çevir ve hızlandır
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 80 },
+            color: { value: "#ff0000" },
+            opacity: { value: 0.5 },
+            size: { value: 3 },
+            move: { enable: true, speed: 2.5 }
+        }
+    });
+}
