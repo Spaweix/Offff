@@ -6,9 +6,12 @@
     <title>Spaweix | Profile</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
     <div class="custom-cursor"></div>
+
+    <div id="particles-js"></div>
 
     <div class="audio-player-ui" id="music-btn">
         <i class="fas fa-play" id="music-icon"></i>
@@ -21,14 +24,39 @@
 
     <div class="profile-container">
         <img src="pfp.jpg" alt="Spaweix" class="avatar">
+        
+        <div class="discord-status-container" title="Discord Durumu">
+            <div class="status-dot" id="d-dot"></div>
+            <span id="d-text">Bağlanıyor...</span>
+        </div>
+
         <h1 class="name">Spaweix</h1>
-        <p class="subtitle"></p>
+        <p class="subtitle" id="typewriter"></p>
         
         <div class="social-links">
             <a href="https://discord.com" target="_blank" title="Discord: spaweix"><i class="fab fa-discord"></i></a>
             <a href="https://steamcommunity.com/profiles/76561199101770138/" target="_blank" title="Steam"><i class="fab fa-steam"></i></a>
             <a href="https://open.spotify.com/user/s3ffafedyi8e389viykqws5gt" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a>
             <a href="https://github.com/Spaweix" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+
+        <button id="open-modal-btn" class="projects-btn">Projelerim</button>
+    </div>
+
+    <div id="projects-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Projeler & Çalışmalar</h2>
+            <div class="project-list">
+                <div class="project-item">
+                    <h3>💻 Netflix Klonu</h3>
+                    <p>Modern web teknolojileri ile geliştirilmiş, kullanıcı dostu Netflix arayüzü tasarımı.</p>
+                </div>
+                <div class="project-item">
+                    <h3>📖 Sessizliğin Başlangıcı</h3>
+                    <p>Luella, Teo ve Jessica'nın hikayesi... Sessizlik bazen bir başlangıçtır, bazen ise bir son.</p>
+                </div>
+            </div>
         </div>
     </div>
 
