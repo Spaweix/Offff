@@ -6,7 +6,6 @@ function playHoverSound() {
     if (!uiAudioCtx) uiAudioCtx = new AudioContext();
     if (uiAudioCtx.state === 'suspended') uiAudioCtx.resume();
     
-    // Dijital, yumuşak bir klik sesi üretir
     const osc = uiAudioCtx.createOscillator();
     const gain = uiAudioCtx.createGain();
     osc.connect(gain);
@@ -14,18 +13,19 @@ function playHoverSound() {
     
     osc.frequency.setValueAtTime(150, uiAudioCtx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(40, uiAudioCtx.currentTime + 0.03);
-    gain.gain.setValueAtTime(0.05, uiAudioCtx.currentTime); // Düşük ses seviyesi
+    gain.gain.setValueAtTime(0.05, uiAudioCtx.currentTime); 
     gain.gain.exponentialRampToValueAtTime(0.001, uiAudioCtx.currentTime + 0.03);
     
     osc.start(uiAudioCtx.currentTime);
     osc.stop(uiAudioCtx.currentTime + 0.05);
 }
 
-// --- 1. Müzik ve Audio Visualizer ---
+// --- 1. Müzik, Visualizer ve Giriş Ekranı (Splash Screen) ---
 const musicBtn = document.getElementById('music-btn');
 const bgMusic = document.getElementById('bg-music');
 const musicIcon = document.getElementById('music-icon');
 const musicText = document.getElementById('music-text');
+const splashScreen = document.getElementById('splash-screen');
 bgMusic.volume = 0.3;
 
 let audioCtx, analyzer, source;
@@ -58,8 +58,6 @@ function initVisualizer() {
             
             const barWidth = (canvas.width / bufferLength) * 2.5;
             let barHeight, x = 0;
-            
-            // Eğer kan modu açıksa kırmızı, değilse beyaz dalgalar
             const isBloodMode = document.body.classList.contains('blood-mode');
             
             for (let i = 0; i < bufferLength; i++) {
@@ -76,8 +74,19 @@ function initVisualizer() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
 }
 
+// Ekrana Tıklandığında Sistemi Başlat
+splashScreen.addEventListener('click', () => {
+    playHoverSound();
+    splashScreen.classList.add('hidden');
+    initVisualizer();
+    bgMusic.play();
+    musicIcon.classList.replace('fa-play', 'fa-pause');
+    musicText.textContent = 'Playing...';
+});
+
+// Müzik Butonu Kontrolü
 musicBtn.addEventListener('click', () => {
-    initVisualizer(); // Müzik başlarken dalgaları çalıştırır
+    initVisualizer(); 
     if (bgMusic.paused) {
         bgMusic.play();
         musicIcon.classList.replace('fa-play', 'fa-pause');
@@ -91,7 +100,7 @@ musicBtn.addEventListener('click', () => {
 
 // --- 2. Custom Cursor ve Hover Efektleri ---
 const cursor = document.querySelector('.custom-cursor');
-const targets = document.querySelectorAll('a, .audio-player-ui, .avatar, button, .close-btn');
+const targets = document.querySelectorAll('a, .audio-player-ui, .avatar, button, .close-btn, #splash-screen');
 
 if (window.innerWidth > 768) {
     document.addEventListener('mousemove', (e) => {
@@ -103,7 +112,7 @@ if (window.innerWidth > 768) {
 targets.forEach(t => {
     t.addEventListener('mouseenter', () => {
         if (window.innerWidth > 768) cursor.classList.add('cursor-hover');
-        playHoverSound(); // İkonun üzerine gelindiğinde o dijital sesi çalar
+        playHoverSound(); 
     });
     t.addEventListener('mouseleave', () => {
         if (window.innerWidth > 768) cursor.classList.remove('cursor-hover');
