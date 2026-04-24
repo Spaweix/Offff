@@ -9,7 +9,12 @@ body.blood-mode::before { background: rgba(50, 0, 0, 0.75); }
 body.blood-mode { animation: glitch 0.15s 2; }
 @keyframes glitch { 0% { transform: translate(0); } 50% { transform: translate(-3px, 3px); filter: hue-rotate(90deg); } 100% { transform: translate(0); } }
 
-/* Visualizer (Ses Dalgaları) Canvas Ayarları */
+/* BAŞLANGIÇ GİRİŞ EKRANI (SPLASH SCREEN) */
+#splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 99998; transition: opacity 0.8s ease, visibility 0.8s ease; cursor: none; }
+.splash-text { font-family: monospace; font-size: 1.2rem; letter-spacing: 3px; color: #fff; animation: pulseText 1.5s infinite; }
+@keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+#splash-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
 #audio-visualizer { position: absolute; bottom: 0; left: 0; width: 100%; height: 150px; z-index: 1; pointer-events: none; opacity: 0.6; }
 
 .profile-container { position: relative; z-index: 2; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 15px; animation: fadeIn 1.2s ease-out; width: 90%; max-width: 500px; }
@@ -42,7 +47,7 @@ body.blood-mode { animation: glitch 0.15s 2; }
 .status-dot.idle { background: #faa61a; box-shadow: 0 0 8px #faa61a; }
 .status-dot.dnd { background: #ed4245; box-shadow: 0 0 8px #ed4245; }
 
-.custom-cursor { width: 20px; height: 20px; border: 2px solid #fff; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.1s; transform: translate(-50%, -50%); }
+.custom-cursor { width: 20px; height: 20px; border: 2px solid #fff; border-radius: 50%; position: fixed; pointer-events: none; z-index: 99999; transition: transform 0.1s; transform: translate(-50%, -50%); }
 .cursor-hover { transform: translate(-50%, -50%) scale(2.5); background: rgba(255,255,255,0.1); }
 .blood-mode .custom-cursor { border-color: #ff0000; }
 
@@ -59,15 +64,16 @@ body.blood-mode { animation: glitch 0.15s 2; }
 #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; pointer-events: none; }
 
 @media screen and (max-width: 768px) {
-    body, a, .avatar, button, .close-btn, .audio-player-ui { cursor: auto !important; }
+    body, a, .avatar, button, .close-btn, .audio-player-ui, #splash-screen { cursor: auto !important; }
     .custom-cursor { display: none !important; }
     .avatar { width: 100px; height: 100px; }
     .name { font-size: 1.8rem; }
     .subtitle { font-size: 1rem; }
+    .splash-text { font-size: 0.9rem; }
     .social-links { gap: 15px; }
     .social-links a { font-size: 1.5rem; }
     .audio-player-ui { top: 15px; padding: 8px 15px; font-size: 0.7rem; }
     .modal-content { padding: 20px; }
     #song-name, #artist-name { max-width: 120px; }
-    #audio-visualizer { height: 80px; } /* Telefonda dalgalar daha küçük olsun */
+    #audio-visualizer { height: 80px; } 
 }
