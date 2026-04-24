@@ -1,10 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Inter', sans-serif;
@@ -19,123 +15,64 @@ body {
     position: relative;
     overflow: hidden;
     cursor: none; 
+    transition: background 1s ease;
 }
 
 body::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.45); 
-    z-index: 1;
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.45); z-index: 1; transition: all 1s ease;
+}
+
+/* LUELLA Gizli Modu CSS'i */
+body.blood-mode::before { background: rgba(80, 0, 0, 0.65); }
+body.blood-mode { animation: screenGlitch 0.2s 3; }
+
+@keyframes screenGlitch {
+    0% { transform: translate(0) }
+    25% { transform: translate(-5px, 5px) }
+    50% { transform: translate(5px, -5px) }
+    75% { transform: translate(-5px, -5px) }
+    100% { transform: translate(0) }
 }
 
 .audio-player-ui {
-    position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 10px 20px;
-    border-radius: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    cursor: none; 
-    transition: background 0.3s ease;
+    position: absolute; top: 30px; left: 50%; transform: translateX(-50%); z-index: 2;
+    display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.05);
+    padding: 10px 20px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px); font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;
+    cursor: none; transition: background 0.3s ease;
 }
 
 .profile-container {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    animation: fadeIn 1.2s ease-out;
+    position: relative; z-index: 2; text-align: center; display: flex;
+    flex-direction: column; align-items: center; gap: 15px; animation: fadeIn 1.2s ease-out;
+    perspective: 1000px; /* 3D Tilt için derinlik */
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+/* Avatar 3D Eğim Ayarı */
 .avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease;
-    cursor: none;
+    width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.15); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    cursor: none; transform-style: preserve-3d; will-change: transform;
 }
 
-.avatar:hover { transform: scale(1.05); }
+.name { font-size: 2.2rem; font-weight: 600; letter-spacing: 1.5px; transition: color 0.5s ease; }
+.blood-mode .name { color: #ff3333; text-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
 
-.name {
-    font-size: 2.2rem;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-}
+.subtitle { font-size: 1.1rem; color: #ccc; min-height: 25px; border-right: 2px solid #fff; white-space: nowrap; overflow: hidden; padding-right: 5px; animation: blinkCursor 0.7s infinite normal; }
+.blood-mode .subtitle { color: #ff9999; }
 
-.subtitle {
-    font-size: 1.1rem;
-    color: #ccc;
-    min-height: 25px;
-    border-right: 2px solid #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    padding-right: 5px;
-    animation: blinkCursor 0.7s infinite normal;
-}
+@keyframes blinkCursor { from, to { border-color: transparent; } 50% { border-color: #fff; } }
 
-@keyframes blinkCursor {
-    from, to { border-color: transparent; }
-    50% { border-color: #fff; }
-}
-
-/* Spotify Durum Kartı */
-.spotify-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(29, 185, 84, 0.1);
-    border: 1px solid rgba(29, 185, 84, 0.3);
-    padding: 8px 15px;
-    border-radius: 12px;
-    margin-top: 5px;
-    max-width: 250px;
-    backdrop-filter: blur(5px);
-}
-
+.spotify-card { display: flex; align-items: center; gap: 12px; background: rgba(29, 185, 84, 0.1); border: 1px solid rgba(29, 185, 84, 0.3); padding: 8px 15px; border-radius: 12px; margin-top: 5px; max-width: 250px; backdrop-filter: blur(5px); }
 .spotify-card i { color: #1DB954; font-size: 1.2rem; }
-
-.spotify-info {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    overflow: hidden;
-}
-
+.spotify-info { display: flex; flex-direction: column; text-align: left; overflow: hidden; }
 #song-name { font-size: 0.85rem; font-weight: 600; white-space: nowrap; }
 #artist-name { font-size: 0.75rem; color: #aaa; white-space: nowrap; }
 
-/* Discord Durum */
-.discord-status-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.8rem;
-    color: #aaa;
-}
-
+.discord-status-container { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #aaa; }
 .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #747f8d; }
 .status-dot.online { background: #3ba55c; box-shadow: 0 0 8px #3ba55c; }
 .status-dot.idle { background: #faa61a; box-shadow: 0 0 8px #faa61a; }
@@ -145,12 +82,24 @@ body::before {
 .social-links a { color: #fff; font-size: 1.8rem; text-decoration: none; opacity: 0.8; cursor: none; transition: all 0.3s ease; }
 .social-links a:hover { opacity: 1; transform: translateY(-5px); }
 
-.custom-cursor {
-    width: 20px; height: 20px; border: 2px solid #fff; border-radius: 50%;
-    position: fixed; pointer-events: none; z-index: 9999;
-    transition: transform 0.1s ease-out; transform: translate(-50%, -50%);
-}
-
+.custom-cursor { width: 20px; height: 20px; border: 2px solid #fff; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.1s ease-out; transform: translate(-50%, -50%); }
 .cursor-hover { transform: translate(-50%, -50%) scale(2.5); background: rgba(255,255,255,0.1); }
+.blood-mode .custom-cursor { border-color: #ff3333; }
 
 #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; pointer-events: none; }
+
+/* Projeler Butonu ve Modal (Yeniden Eklendi) */
+.projects-btn { margin-top: 20px; background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); padding: 10px 25px; font-family: inherit; font-size: 0.9rem; letter-spacing: 1px; border-radius: 25px; text-transform: uppercase; transition: all 0.3s ease; backdrop-filter: blur(5px); cursor: none; }
+.projects-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.4s ease; }
+.modal.show { display: flex; align-items: center; justify-content: center; opacity: 1; }
+.modal-content { background: rgba(20, 20, 20, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; text-align: left; position: relative; transform: translateY(-20px); transition: transform 0.4s ease; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+.modal.show .modal-content { transform: translateY(0); }
+.close-btn { position: absolute; top: 15px; right: 20px; color: #aaa; font-size: 28px; font-weight: bold; transition: color 0.3s; cursor: none; }
+.close-btn:hover { color: #fff; }
+.project-item { background: rgba(255, 255, 255, 0.05); margin-top: 15px; padding: 15px; border-radius: 10px; border-left: 3px solid #fff; transition: transform 0.3s ease; }
+.blood-mode .project-item { border-left-color: #ff3333; }
+.project-item:hover { transform: translateX(5px); }
+.project-item h3 { margin-bottom: 5px; font-size: 1.1rem; }
+.project-item p { font-size: 0.85rem; color: #aaa; line-height: 1.4; }
