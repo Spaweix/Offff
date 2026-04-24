@@ -18,6 +18,7 @@ body {
     min-height: 100vh;
     position: relative;
     overflow: hidden;
+    cursor: none; /* Varsayılan imleci gizliyoruz */
 }
 
 body::before {
@@ -48,7 +49,7 @@ body::before {
     font-size: 0.8rem;
     letter-spacing: 1px;
     text-transform: uppercase;
-    cursor: pointer;
+    cursor: none; /* Üzerine gelince de varsayılan imleç çıkmasın */
     transition: background 0.3s ease;
 }
 
@@ -81,6 +82,7 @@ body::before {
     border: 2px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease;
+    cursor: none;
 }
 
 .avatar:hover {
@@ -110,12 +112,58 @@ body::before {
     color: #fff;
     font-size: 1.8rem;
     text-decoration: none;
-    transition: all 0.3s ease;
     opacity: 0.8;
+    position: relative;
+    cursor: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
 }
 
-.social-links a:hover {
+/* --- YENİ EKLENEN KISIMLAR --- */
+
+/* Özel İmleç Tasarımı */
+.custom-cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease-out, background 0.2s ease;
+    transform: translate(-50%, -50%);
+}
+
+.cursor-hover {
+    transform: translate(-50%, -50%) scale(2.5);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 1);
+}
+
+/* Markalara Özel Hover Efektleri */
+.social-links a[title*="Discord"]:hover {
     opacity: 1;
-    transform: translateY(-5px);
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    color: #5865F2;
+    transform: translateY(-8px) scale(1.2);
+    filter: drop-shadow(0 0 10px #5865F2);
+}
+
+.social-links a[title*="Steam"]:hover {
+    opacity: 1;
+    color: #b8b6b4; /* Siyah arkaplanda belirgin olması için gümüş tonu */
+    transform: translateY(-8px) scale(1.2);
+    filter: drop-shadow(0 0 10px #ffffff);
+}
+
+.social-links a[title*="Spotify"]:hover {
+    opacity: 1;
+    color: #1DB954;
+    transform: translateY(-8px) scale(1.2);
+    filter: drop-shadow(0 0 10px #1DB954);
+}
+
+.social-links a[title*="GitHub"]:hover {
+    opacity: 1;
+    color: #fafafa;
+    transform: translateY(-8px) scale(1.2);
+    filter: drop-shadow(0 0 10px #ffffff);
 }
