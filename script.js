@@ -1,11 +1,83 @@
-// --- 1. Müzik ve Ses Kontrolü ---
+// --- 0. UI Ses Sistemi (Sentetik Hover/Tık) ---
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let uiAudioCtx;
+
+function playHoverSound() {
+    if (!uiAudioCtx) uiAudioCtx = new AudioContext();
+    if (uiAudioCtx.state === 'suspended') uiAudioCtx.resume();
+    
+    // Dijital, yumuşak bir klik sesi üretir
+    const osc = uiAudioCtx.createOscillator();
+    const gain = uiAudioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(uiAudioCtx.destination);
+    
+    osc.frequency.setValueAtTime(150, uiAudioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(40, uiAudioCtx.currentTime + 0.03);
+    gain.gain.setValueAtTime(0.05, uiAudioCtx.currentTime); // Düşük ses seviyesi
+    gain.gain.exponentialRampToValueAtTime(0.001, uiAudioCtx.currentTime + 0.03);
+    
+    osc.start(uiAudioCtx.currentTime);
+    osc.stop(uiAudioCtx.currentTime + 0.05);
+}
+
+// --- 1. Müzik ve Audio Visualizer ---
 const musicBtn = document.getElementById('music-btn');
 const bgMusic = document.getElementById('bg-music');
 const musicIcon = document.getElementById('music-icon');
 const musicText = document.getElementById('music-text');
 bgMusic.volume = 0.3;
 
+let audioCtx, analyzer, source;
+const canvas = document.getElementById('audio-visualizer');
+const ctx = canvas.getContext('2d');
+
+function initVisualizer() {
+    if (!audioCtx) {
+        audioCtx = new AudioContext();
+        analyzer = audioCtx.createAnalyser();
+        source = audioCtx.createMediaElementSource(bgMusic);
+        source.connect(analyzer);
+        analyzer.connect(audioCtx.destination);
+        analyzer.fftSize = 256;
+        
+        const bufferLength = analyzer.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerWidth > 768 ? 150 : 80;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function draw() {
+            requestAnimationFrame(draw);
+            analyzer.getByteFrequencyData(dataArray);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const barWidth = (canvas.width / bufferLength) * 2.5;
+            let barHeight, x = 0;
+            
+            // Eğer kan modu açıksa kırmızı, değilse beyaz dalgalar
+            const isBloodMode = document.body.classList.contains('blood-mode');
+            
+            for (let i = 0; i < bufferLength; i++) {
+                barHeight = dataArray[i] / 2;
+                ctx.fillStyle = isBloodMode 
+                    ? `rgba(255, 0, 0, ${barHeight / 150})` 
+                    : `rgba(255, 255, 255, ${barHeight / 255})`;
+                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+                x += barWidth + 2;
+            }
+        }
+        draw();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
 musicBtn.addEventListener('click', () => {
+    initVisualizer(); // Müzik başlarken dalgaları çalıştırır
     if (bgMusic.paused) {
         bgMusic.play();
         musicIcon.classList.replace('fa-play', 'fa-pause');
@@ -17,7 +89,7 @@ musicBtn.addEventListener('click', () => {
     }
 });
 
-// --- 2. Custom Cursor (Sadece bilgisayarda çalışır) ---
+// --- 2. Custom Cursor ve Hover Efektleri ---
 const cursor = document.querySelector('.custom-cursor');
 const targets = document.querySelectorAll('a, .audio-player-ui, .avatar, button, .close-btn');
 
@@ -26,12 +98,17 @@ if (window.innerWidth > 768) {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
     });
-
-    targets.forEach(t => {
-        t.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-        t.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
-    });
 }
+
+targets.forEach(t => {
+    t.addEventListener('mouseenter', () => {
+        if (window.innerWidth > 768) cursor.classList.add('cursor-hover');
+        playHoverSound(); // İkonun üzerine gelindiğinde o dijital sesi çalar
+    });
+    t.addEventListener('mouseleave', () => {
+        if (window.innerWidth > 768) cursor.classList.remove('cursor-hover');
+    });
+});
 
 // --- 3. Daktilo (Typewriter) ---
 const typeWriterElement = document.getElementById('typewriter');
@@ -101,7 +178,7 @@ document.addEventListener('keydown', (e) => {
         
         bgMusic.playbackRate = 0.5; 
         
-        texts = ["Onu duydun mu?", "Kaçacak yerin yok.", "Sessizlik başliyor..."];
+        texts = ["Onu duydun mu?", "Kaçacak yerin yok.", "Sessizlik başlıyor..."];
         tIdx = 0; cIdx = 0;
         loadParticles("#ff0000");
     }
