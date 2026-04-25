@@ -1,3 +1,4 @@
+// --- 0. UI Ses Sistemi (Sentetik Hover/Tık) ---
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let uiAudioCtx;
 
@@ -19,6 +20,7 @@ function playHoverSound() {
     osc.stop(uiAudioCtx.currentTime + 0.05);
 }
 
+// --- 1. Müzik, Visualizer ve Giriş Ekranı (Splash Screen) ---
 const musicBtn = document.getElementById('music-btn');
 const bgMusic = document.getElementById('bg-music');
 const musicIcon = document.getElementById('music-icon');
@@ -94,6 +96,7 @@ musicBtn.addEventListener('click', () => {
     }
 });
 
+// --- 2. Custom Cursor ve Hover Efektleri ---
 const cursor = document.querySelector('.custom-cursor');
 const targets = document.querySelectorAll('a, .audio-player-ui, .avatar, button, .close-btn, #splash-screen');
 
@@ -114,6 +117,7 @@ targets.forEach(t => {
     });
 });
 
+// --- 3. Daktilo (Typewriter) ---
 const typeWriterElement = document.getElementById('typewriter');
 let texts = ["Gamer", "Writer", "Audiophile", "Tech Enthusiast"];
 let tIdx = 0, cIdx = 0, isDel = false;
@@ -128,6 +132,7 @@ function type() {
 }
 type();
 
+// --- 4. Modal ---
 const modal = document.getElementById("projects-modal");
 const openBtn = document.getElementById("open-modal-btn");
 const closeBtn = document.querySelector(".close-btn");
@@ -136,7 +141,7 @@ openBtn.onclick = () => modal.classList.add("show");
 closeBtn.onclick = () => modal.classList.remove("show");
 window.onclick = (e) => { if (e.target === modal) modal.classList.remove("show"); }
 
-// --- LANYARD API (Oyun ve Spotify Ayrıştırıcısı) ---
+// --- 5. LANYARD API (ÖNCELİK SPOTIFY OLARAK GÜNCELLENDİ) ---
 const discordId = '771027676055207938';
 async function updateStatus() {
     try {
@@ -152,24 +157,8 @@ async function updateStatus() {
         const actName = document.getElementById('activity-name');
         const actDetails = document.getElementById('activity-details');
 
-        let activeGame = null;
-        if (data.activities && data.activities.length > 0) {
-            // Type 0, Discord'da oynanan bir oyunu temsil eder
-            activeGame = data.activities.find(a => a.type === 0);
-        }
-
-        // Öncelik 1: Oyun oynanıyorsa oyunu göster
-        if (activeGame) {
-            activityCard.style.display = 'flex';
-            actIcon.className = 'fas fa-gamepad';
-            actIcon.style.color = '#fff';
-            activityCard.style.background = 'rgba(255, 255, 255, 0.05)';
-            activityCard.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-            actName.textContent = activeGame.name;
-            actDetails.textContent = activeGame.details || activeGame.state || 'Oynuyor';
-        } 
-        // Öncelik 2: Oyun yoksa ama Spotify açıksa Spotify'ı göster
-        else if (data.listening_to_spotify) {
+        // ÖNCELİK 1: SPOTIFY
+        if (data.listening_to_spotify) {
             activityCard.style.display = 'flex';
             actIcon.className = 'fab fa-spotify';
             actIcon.style.color = '#1DB954';
@@ -178,7 +167,22 @@ async function updateStatus() {
             actName.textContent = data.spotify.track;
             actDetails.textContent = data.spotify.artist;
         } 
-        // İkisi de yoksa kartı gizle
+        // ÖNCELİK 2: SPOTIFY KAPALIYSA OYUNLARI GÖSTER
+        else if (data.activities && data.activities.length > 0) {
+            const activeGame = data.activities.find(a => a.type === 0);
+            if (activeGame) {
+                activityCard.style.display = 'flex';
+                actIcon.className = 'fas fa-gamepad';
+                actIcon.style.color = '#fff';
+                activityCard.style.background = 'rgba(255, 255, 255, 0.05)';
+                activityCard.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                actName.textContent = activeGame.name;
+                actDetails.textContent = activeGame.details || activeGame.state || 'Oynuyor';
+            } else {
+                activityCard.style.display = 'none';
+            }
+        } 
+        // İKİSİ DE YOKSA KARTI GİZLE
         else {
             activityCard.style.display = 'none';
         }
@@ -187,6 +191,7 @@ async function updateStatus() {
 }
 setInterval(updateStatus, 10000); updateStatus();
 
+// --- 6. Particles ---
 function loadParticles(color) {
     particlesJS('particles-js', {
         particles: {
@@ -198,6 +203,7 @@ function loadParticles(color) {
 }
 loadParticles("#ffffff");
 
+// --- 7. LUELLA EASTER EGG ---
 let input = "";
 document.addEventListener('keydown', (e) => {
     input += e.key.toLowerCase();
@@ -214,6 +220,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// --- 8. Dinamik Sekme Başlığı ---
 let originalTitle = document.title;
 document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
